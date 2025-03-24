@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Poly</title>
+    <title>Rotating Polygon in Three.js</title>
     <style>
         body { margin: 0; background: white; }
         canvas { display: block; background: white !important; }
@@ -13,6 +13,7 @@
     <script type="module">
         import * as THREE from 'https://cdn.jsdelivr.net/npm/three@0.150.1/build/three.module.js';
 
+        // Sample polygon data
         // const polygonPoints = [
         //     [6, 18],
         //     [14, 18],
@@ -20,16 +21,19 @@
         //     [10, 5],
         //     [4, 9]
         // ];
+
+
         // const polygonPoints = [[8,3], [4,9], [7,15], [15,12], [18,6]]
         // const polygonPoints = [[5,4], [3,10], [8,17], [16,14], [14,7]] 
-        // const polygonPoints = [[4,7], [12,3], [17,9], [15,16], [6,14]] 
+        const polygonPoints = [[4,7], [12,3], [17,9], [15,16], [6,14]] 
         // const polygonPoints = [[6,2], [2,8], [9,14], [17,10], [15,5]]  
         // const polygonPoints = [[2,5], [9,2], [14,8], [11,15], [3,12]]  
         // const polygonPoints = [[5,3], [15,4], [19,10], [12,18], [3,13]]
         // const polygonPoints = [[4,5], [2,12], [7,18], [15,15], [13,8]] 
         // const polygonPoints = [[7,6], [16,5], [21,11], [14,17], [5,14]] 
         // const polygonPoints = [[3,8], [10,4], [16,7], [13,14], [5,11]]   
-        const polygonPoints = [[9,2], [4,6], [6,12], [14,13], [17,8]] 
+        // const polygonPoints = [[9,2], [4,6], [6,12], [14,13], [17,8]]
+        // const polygonPoints =[[2,5], [9,2], [14,8], [11,15], [3,12]]
 
         // const polygonPoints = [[-11, -12], [-5, -12], [-5, -2], [-11, -2]]
 
@@ -85,14 +89,17 @@
         const E = points[points.length - 1].clone();
         let tp = points.map(p => p.clone().sub(A));
 
-        const dx = E.x - 0;
-        const dy = E.y - 0;
+        const dx = E.x - A.x;
+        const dy = E.y - A.y;
         const theta = -Math.atan2(dy, dx);
 
-        console.log("======Theta===>", theta);
         const rm = new THREE.Matrix4().makeRotationZ(theta);
-        console.log('-----RotatioNMatrix', rm)
         let rp = tp.map(p => p.clone().applyMatrix4(rm));
+
+        rp = rp.map(r => {
+            r.y = -1 * r.y
+            return r
+        });
 
         drawPolygon(rp, 0x000000, 0x0000ff);
 
