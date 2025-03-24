@@ -89,15 +89,22 @@
         const E = points[points.length - 1].clone();
         let tp = points.map(p => p.clone().sub(A));
 
+        console.log(A, E)
         const dx = E.x - A.x;
         const dy = E.y - A.y;
         const theta = -Math.atan2(dy, dx);
 
-        const rm = new THREE.Matrix4().makeRotationZ(theta);
-        let rp = tp.map(p => p.clone().applyMatrix4(rm));
+        const cosTheta = Math.cos(theta);
+        const sinTheta = Math.sin(theta);
+
+        let rp = tp.map(p => new THREE.Vector3(
+            p.x * cosTheta - p.y * sinTheta,
+            p.x * sinTheta + p.y * cosTheta,
+            0
+        ));
 
         rp = rp.map(r => {
-            r.y = -1 * r.y
+            r.y =  r.y > -1 ? r.y : -1 * r.y
             return r
         });
 
